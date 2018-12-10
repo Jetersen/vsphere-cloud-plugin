@@ -1,11 +1,10 @@
 package org.jenkinsci.plugins.vsphere;
 
+import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.slaves.CloudRetentionStrategy;
 import hudson.slaves.RetentionStrategy;
 
-import org.kohsuke.accmod.Restricted;
-import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 public class VSphereCloudRetentionStrategy extends CloudRetentionStrategy {
@@ -27,7 +26,7 @@ public class VSphereCloudRetentionStrategy extends CloudRetentionStrategy {
         return DESCRIPTOR;
     }
 
-    @Restricted(NoExternalUse.class)
+    @Extension
     public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
     public static final class DescriptorImpl extends Descriptor<RetentionStrategy<?>> {
