@@ -1,13 +1,12 @@
 package org.jenkinsci.plugins.vsphere.parameters;
 
-import static org.jenkinsci.plugins.vsphere.tools.PermissionUtils.throwUnlessUserHasPermissionToAccessJob;
-
 import hudson.Extension;
 import hudson.model.Item;
 import hudson.model.ParameterValue;
 import hudson.model.SimpleParameterDefinition;
 import hudson.model.StringParameterValue;
 import hudson.util.ListBoxModel;
+import java.util.List;
 import net.sf.json.JSONObject;
 import org.jenkinsci.plugins.vSphereCloud;
 import org.kohsuke.stapler.AncestorInPath;
@@ -15,7 +14,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 
-import java.util.List;
+import static org.jenkinsci.plugins.vsphere.tools.PermissionUtils.throwUnlessUserHasPermissionToAccessJob;
 
 /**
  * Parameter used for selecting a vSphere cloud from a dropdown box.
@@ -35,8 +34,10 @@ public class CloudSelectorParameter extends SimpleParameterDefinition {
 
     private StringParameterValue checkValue(StringParameterValue value) {
         List<String> cloudNames = vSphereCloud.findAllVsphereCloudNames();
-        if (!cloudNames.contains(value.value))
-            throw new IllegalArgumentException("No vsphere cloud with name: " + value.value);
+        String check = String.valueOf(value.getValue());
+        if (!cloudNames.contains(check)) {
+            throw new IllegalArgumentException("No vsphere cloud with name: " + check);
+        }
         return value;
     }
 
