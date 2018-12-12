@@ -83,8 +83,7 @@ public final class CloudProvisioningAlgorithm {
 
     private static String calcSequentialSuffix(final int attempt) {
         final int slaveNumber = attempt + 1;
-        final String suffix = Integer.toString(slaveNumber);
-        return suffix;
+        return Integer.toString(slaveNumber);
     }
 
     private static String calcRandomSuffix(int attempt) {
@@ -95,8 +94,7 @@ public final class CloudProvisioningAlgorithm {
         final long msb = uuid.getMostSignificantBits();
         final BigInteger bigNumber = toBigInteger(msb, lsb);
         // turn into a string
-        final String suffix = bigNumber.toString(Character.MAX_RADIX);
-        return suffix;
+        return bigNumber.toString(Character.MAX_RADIX);
     }
 
     /**
@@ -133,7 +131,6 @@ public final class CloudProvisioningAlgorithm {
         bytes[b++] = (byte) (lsb >> 16);
         bytes[b++] = (byte) (lsb >> 8);
         bytes[b++] = (byte) (lsb);
-        final BigInteger bigNumber = new BigInteger(bytes);
-        return bigNumber;
+        return new BigInteger(bytes);
     }
 }

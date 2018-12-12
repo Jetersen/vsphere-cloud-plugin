@@ -22,7 +22,7 @@ public class vSphereCloudSlaveComputer extends AbstractCloudComputer {
     /**
      * Cached VM details we show the user if they look at the
      * .../computer/NodeName/ page.
-     * @see The corresponding main.jelly file for how this is used.
+     * See the corresponding main.jelly file for how this is used.
      */
     private transient VMInformation vmInformation;
 

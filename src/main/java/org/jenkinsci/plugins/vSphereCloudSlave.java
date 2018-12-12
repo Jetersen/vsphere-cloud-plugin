@@ -167,8 +167,7 @@ public class vSphereCloudSlave extends AbstractCloudSlave {
     protected vSphereCloud findOurVsInstance(final ComputerLauncher l) {
         if (l instanceof vSphereCloudLauncher) {
             final vSphereCloudLauncher launcher = (vSphereCloudLauncher) l;
-            final vSphereCloud cloud = launcher.findOurVsInstance();
-            return cloud;
+            return launcher.findOurVsInstance();
         }
         return null;
     }
@@ -394,7 +393,7 @@ public class vSphereCloudSlave extends AbstractCloudSlave {
 
         public List<vSphereCloud> getvSphereClouds() {
             List<vSphereCloud> result = new ArrayList<vSphereCloud>();
-            for (Cloud cloud : Jenkins.getInstance().clouds) {
+            for (Cloud cloud : Jenkins.get().clouds) {
                 if (cloud instanceof vSphereCloud) {
                     result.add((vSphereCloud) cloud);
                 }

@@ -153,7 +153,7 @@ public class vSphereCloudLauncher extends DelegatingComputerLauncher {
         {
             try {
 
-                if (slaveComputer.isTemporarilyOffline()) {
+                if (slaveComputer.isOffline()) {
                     vSphereCloud.Log(slaveComputer, taskListener, "Not launching VM because it's not accepting tasks; temporarily offline");
                     return;
                 }
@@ -294,7 +294,7 @@ public class vSphereCloudLauncher extends DelegatingComputerLauncher {
             vSphereCloud.Log(slaveComputer, taskListener, "Already disconnecting on a separate thread");
             return;
         }
-        if (slaveComputer.isTemporarilyOffline()) {
+        if (slaveComputer.isOffline()) {
             if (!(slaveComputer.getOfflineCause() instanceof VSphereOfflineCause)) {
                 vSphereCloud.Log(slaveComputer, taskListener, "Not disconnecting VM because it's not accepting tasks");
                 return;

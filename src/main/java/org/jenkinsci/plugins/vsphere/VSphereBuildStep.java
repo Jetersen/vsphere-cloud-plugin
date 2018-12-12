@@ -50,7 +50,7 @@ public abstract class VSphereBuildStep implements Describable<VSphereBuildStep>,
 	}
 
 	public static DescriptorExtensionList<VSphereBuildStep, VSphereBuildStepDescriptor> all() {
-		return Jenkins.getInstance().getDescriptorList(VSphereBuildStep.class);
+		return Jenkins.get().getDescriptorList(VSphereBuildStep.class);
 	}
 
 	public abstract boolean perform(final AbstractBuild<?, ?> build, final Launcher launcher, final BuildListener listener) throws Exception;
@@ -59,7 +59,7 @@ public abstract class VSphereBuildStep implements Describable<VSphereBuildStep>,
 
 	@Override
 	public VSphereBuildStepDescriptor getDescriptor() {
-		return (VSphereBuildStepDescriptor) Jenkins.getInstance().getDescriptor(getClass());
+		return (VSphereBuildStepDescriptor) Jenkins.get().getDescriptor(getClass());
 	}
 
 	public static abstract class VSphereBuildStepDescriptor extends Descriptor<VSphereBuildStep> {

@@ -62,7 +62,7 @@ public abstract class ReconfigureStep extends AbstractDescribableImpl<Reconfigur
     }
 
 	public static List<ReconfigureStepDescriptor> all() {
-        return Jenkins.getInstance().getDescriptorList(ReconfigureStep.class);
+        return Jenkins.get().getDescriptorList(ReconfigureStep.class);
 	}
 
 	public abstract boolean perform(final AbstractBuild<?, ?> build, final Launcher launcher, final BuildListener listener) throws VSphereException;
@@ -87,7 +87,7 @@ public abstract class ReconfigureStep extends AbstractDescribableImpl<Reconfigur
 		}
 	}
 
-    public static enum DeviceAction {
+    public enum DeviceAction {
 
         ADD(Messages.vm_reconfigure_Add()) {
 
@@ -101,7 +101,7 @@ public abstract class ReconfigureStep extends AbstractDescribableImpl<Reconfigur
 
         final private String label;
 
-        private DeviceAction(String label) {
+        DeviceAction(String label) {
             this.label = label;
         }
 

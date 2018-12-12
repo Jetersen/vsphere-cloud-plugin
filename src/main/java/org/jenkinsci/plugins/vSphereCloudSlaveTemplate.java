@@ -426,7 +426,7 @@ public class vSphereCloudSlaveTemplate implements Describable<vSphereCloudSlaveT
                 LOGGER.log(Level.SEVERE, "VM {0} name clashes with one we wanted to use, but it wasn't started by this plugin.", cloneName );
                 throw ex;
             }
-            final String ourJenkinsUrl = Jenkins.getActiveInstance().getRootUrl();
+            final String ourJenkinsUrl = Jenkins.get().getRootUrl();
             if ( vmJenkinsUrl.equals(ourJenkinsUrl) ) {
                 LOGGER.log(Level.INFO, "Found existing VM {0} that we started previously (and must have either lost track of it or failed to delete it).", cloneName );
             } else {
@@ -474,12 +474,11 @@ public class vSphereCloudSlaveTemplate implements Describable<vSphereCloudSlaveT
             LOGGER.log(Level.FINER, "Slave {0} uses SSHLauncher - obtaining IP address...", cloneName);
             final String ip = vSphere.getIp(vSphere.getVmByName(cloneName), 1000);
             LOGGER.log(Level.FINER, "Slave {0} has IP address {1}", new Object[] { cloneName, ip });
-            final SSHLauncher launcherWithIPAddress = new SSHLauncher(ip, sshLauncher.getPort(),
+            return new SSHLauncher(ip, sshLauncher.getPort(),
                     sshLauncher.getCredentialsId(), sshLauncher.getJvmOptions(), sshLauncher.getJavaPath(),
                     sshLauncher.getPrefixStartSlaveCmd(), sshLauncher.getSuffixStartSlaveCmd(),
                     sshLauncher.getLaunchTimeoutSeconds(), sshLauncher.getMaxNumRetries(),
                     sshLauncher.getRetryWaitTime());
-            return launcherWithIPAddress;
         }
         throw new IllegalStateException("Unsupported launcher (" + launcher + ") in template configuration");
     }
@@ -487,15 +486,13 @@ public class vSphereCloudSlaveTemplate implements Describable<vSphereCloudSlaveT
     private RetentionStrategy<?> determineRetention() {
         if (retentionStrategy instanceof RunOnceCloudRetentionStrategy) {
             final RunOnceCloudRetentionStrategy templateStrategy = (RunOnceCloudRetentionStrategy) retentionStrategy;
-            final RunOnceCloudRetentionStrategy cloneStrategy = new RunOnceCloudRetentionStrategy(
+            return new RunOnceCloudRetentionStrategy(
                     templateStrategy.getIdleMinutes());
-            return cloneStrategy;
         }
         if (retentionStrategy instanceof VSphereCloudRetentionStrategy) {
             final VSphereCloudRetentionStrategy templateStrategy = (VSphereCloudRetentionStrategy) retentionStrategy;
-            final VSphereCloudRetentionStrategy cloneStrategy = new VSphereCloudRetentionStrategy(
+            return new VSphereCloudRetentionStrategy(
                     templateStrategy.getIdleMinutes());
-            return cloneStrategy;
         }
         throw new IllegalStateException(
                 "Unsupported retentionStrategy (" + retentionStrategy + ") in template configuration");
@@ -504,7 +501,7 @@ public class vSphereCloudSlaveTemplate implements Describable<vSphereCloudSlaveT
     @SuppressWarnings("unchecked")
     @Override
     public Descriptor<vSphereCloudSlaveTemplate> getDescriptor() {
-        return Jenkins.getInstance().getDescriptor(getClass());
+        return Jenkins.get().getDescriptor(getClass());
     }
 
     @Extension
@@ -592,7 +589,7 @@ public class vSphereCloudSlaveTemplate implements Describable<vSphereCloudSlaveT
                     CommandLauncher.class.getName(),
                     JNLPLauncher.class.getName()
             );
-            final List<Descriptor<ComputerLauncher>> knownLaunchers = Jenkins.getInstance().getDescriptorList(ComputerLauncher.class);
+            final List<Descriptor<ComputerLauncher>> knownLaunchers = Jenkins.get().getDescriptorList(ComputerLauncher.class);
             final List<Descriptor<ComputerLauncher>> result = new ArrayList<>(knownLaunchers.size());
             for (final Descriptor<ComputerLauncher> knownLauncher : knownLaunchers) {
                 if(supportedLaunchers.contains(knownLauncher.getId())) {
@@ -640,7 +637,7 @@ public class vSphereCloudSlaveTemplate implements Describable<vSphereCloudSlaveT
             throws IOException, InterruptedException {
         final EnvVars knownVariables = calculateVariablesForGuestInfo(cloneName, listener);
         final Map<String, String> result = new LinkedHashMap<String, String>();
-        final String jenkinsUrl = Jenkins.getActiveInstance().getRootUrl();
+        final String jenkinsUrl = Jenkins.get().getRootUrl();
         if (jenkinsUrl != null) {
             result.put(VSPHERE_ATTR_FOR_JENKINSURL, jenkinsUrl);
         }
@@ -662,7 +659,7 @@ public class vSphereCloudSlaveTemplate implements Describable<vSphereCloudSlaveT
         final EnvVars knownVariables = new EnvVars();
         // Maintenance note: If you update this method, you must also update the
         // UI help page to match.
-        final String jenkinsUrl = Jenkins.getActiveInstance().getRootUrl();
+        final String jenkinsUrl = Jenkins.get().getRootUrl();
         if (jenkinsUrl != null) {
             addEnvVar(knownVariables, "JENKINS_URL", jenkinsUrl);
             addEnvVar(knownVariables, "HUDSON_URL", jenkinsUrl);
@@ -671,7 +668,7 @@ public class vSphereCloudSlaveTemplate implements Describable<vSphereCloudSlaveT
         if (slaveSecret != null) {
             addEnvVar(knownVariables, "JNLP_SECRET", slaveSecret);
         }
-        addEnvVars(knownVariables, listener, Jenkins.getInstance().getGlobalNodeProperties());
+        addEnvVars(knownVariables, listener, Jenkins.get().getGlobalNodeProperties());
         addEnvVars(knownVariables, listener, this.nodeProperties);
         addEnvVar(knownVariables, "NODE_NAME", cloneName);
         addEnvVar(knownVariables, "NODE_LABELS", getLabelSet() == null ? null : Util.join(getLabelSet(), " "));

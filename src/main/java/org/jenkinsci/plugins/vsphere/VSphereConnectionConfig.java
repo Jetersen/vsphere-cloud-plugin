@@ -140,7 +140,7 @@ public class VSphereConnectionConfig extends AbstractDescribableImpl<VSphereConn
         public ListBoxModel doFillCredentialsIdItems(@AncestorInPath AbstractFolder<?> containingFolderOrNull,
                 @QueryParameter String vsHost) {
             throwUnlessUserHasPermissionToConfigureCloud(containingFolderOrNull);
-            final Jenkins instance = Jenkins.getInstance(); 
+            final Jenkins instance = Jenkins.get();
             if (instance != null) {
                 return new StandardListBoxModel().withEmptySelection().withMatching(
                     CREDENTIALS_MATCHER, CredentialsProvider.lookupCredentials(StandardCredentials.class,
@@ -218,7 +218,7 @@ public class VSphereConnectionConfig extends AbstractDescribableImpl<VSphereConn
         
         public static @CheckForNull StandardCredentials lookupCredentials
                         (@CheckForNull String credentialsId, @Nonnull String vsHost) {
-            final Jenkins instance = Jenkins.getInstance();            
+            final Jenkins instance = Jenkins.get();
             if (instance != null && credentialsId != null) {
                 return CredentialsMatchers.firstOrNull(
                         CredentialsProvider.lookupCredentials(StandardCredentials.class, instance, 

@@ -163,7 +163,7 @@ public class VSphereBuildStepContainer extends Builder implements SimpleBuildSte
 
                     TopLevelItem topLevelItem = null;
                     if (prevFolder == null) {
-                        topLevelItem = Jenkins.getActiveInstance().getItem(item);
+                        topLevelItem = Jenkins.get().getItem(item);
                     } else {
                         Collection<TopLevelItem> items = prevFolder.getItems();
                         for (TopLevelItem levelItem : items) {
@@ -181,7 +181,7 @@ public class VSphereBuildStepContainer extends Builder implements SimpleBuildSte
 
                 //adding try block to prevent page from not loading
 
-                for (Cloud cloud : Jenkins.getInstance().clouds) {
+                for (Cloud cloud : Jenkins.get().clouds) {
                     if (cloud instanceof vSphereCloud) {
                         hasVsphereClouds = true;
                         select.add(((vSphereCloud) cloud).getVsDescription());

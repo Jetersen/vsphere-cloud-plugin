@@ -91,7 +91,7 @@ public class PermissionUtils {
      *            The first permission we will accept.
      */
     private static void checkPermission(final Object c, Permission allowablePermission) {
-        final AccessControlled ac = c instanceof AccessControlled ? (AccessControlled) c : Jenkins.getInstance();
+        final AccessControlled ac = c instanceof AccessControlled ? (AccessControlled) c : Jenkins.get();
         ac.checkPermission(allowablePermission);
     }
 }

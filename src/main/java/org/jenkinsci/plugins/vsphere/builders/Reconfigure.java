@@ -134,7 +134,7 @@ public class Reconfigure extends VSphereBuildStep implements SimpleBuildStep{
 
 	@Override
     public ReconfigureDescriptor getDescriptor() {
-        return (ReconfigureDescriptor) Jenkins.getInstance().getDescriptor(getClass());
+        return (ReconfigureDescriptor) Jenkins.get().getDescriptor(getClass());
     }
 
 	@Extension

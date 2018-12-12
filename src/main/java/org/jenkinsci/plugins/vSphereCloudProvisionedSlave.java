@@ -126,7 +126,7 @@ public class vSphereCloudProvisionedSlave extends vSphereCloudSlave {
 
         public List<vSphereCloud> getvSphereClouds() {
             List<vSphereCloud> result = new ArrayList<vSphereCloud>();
-            for (Cloud cloud : Jenkins.getInstance().clouds) {
+            for (Cloud cloud : Jenkins.get().clouds) {
                 if (cloud instanceof vSphereCloud) {
                     result.add((vSphereCloud) cloud);
                 }

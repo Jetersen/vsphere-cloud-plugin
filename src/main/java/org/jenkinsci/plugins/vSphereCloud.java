@@ -268,7 +268,7 @@ public class vSphereCloud extends Cloud {
     }
 
     public boolean getAllowUntrustedCertificate() {
-        return vsConnectionConfig != null ? vsConnectionConfig.getAllowUntrustedCertificate() : false;
+        return vsConnectionConfig != null && vsConnectionConfig.getAllowUntrustedCertificate();
     }
 
     public
@@ -362,11 +362,11 @@ public class vSphereCloud extends Cloud {
                         + numberOfvSphereCloudSlaveExecutors + " executors), templates available are " + whatWeCouldUse);
                 while (excessWorkloadSoFar > 0) {
                     if (maxSlavesToProvisionBeforeCloudCapHit != null) {
-                        final int intValue = maxSlavesToProvisionBeforeCloudCapHit.intValue();
+                        final int intValue = maxSlavesToProvisionBeforeCloudCapHit;
                         if (intValue <= 0) {
                             break; // out of capacity due to cloud instance cap
                         }
-                        maxSlavesToProvisionBeforeCloudCapHit = Integer.valueOf(intValue - 1);
+                        maxSlavesToProvisionBeforeCloudCapHit = intValue - 1;
                     }
                     final CloudProvisioningRecord whatWeShouldSpinUp = CloudProvisioningAlgorithm.findTemplateWithMostFreeCapacity(whatWeCouldUse);
                     if (whatWeShouldSpinUp == null) {
@@ -524,8 +524,7 @@ public class vSphereCloud extends Cloud {
             };
             templateState.provisioningStarted(whatWeShouldSpinUp, nodeName);
             final Future<Node> provisionNodeTask = Computer.threadPoolForRemoting.submit(provisionNodeCallable);
-            final VSpherePlannedNode result = new VSpherePlannedNode(nodeName, provisionNodeTask, numberOfExecutors);
-            return result;
+            return new VSpherePlannedNode(nodeName, provisionNodeTask, numberOfExecutors);
         }
 
         private static Node provisionNewNode(final CloudProvisioningRecord whatWeShouldSpinUp, final String cloneName)
@@ -534,7 +533,7 @@ public class vSphereCloud extends Cloud {
             final vSphereCloudProvisionedSlave slave = template.provision(cloneName, StreamTaskListener.fromStdout());
             // ensure Jenkins knows about us before we forget what we're doing,
             // otherwise it'll just ask for more.
-            Jenkins.getInstance().addNode(slave);
+            Jenkins.get().addNode(slave);
             return slave;
         }
 
@@ -616,7 +615,7 @@ public class vSphereCloud extends Cloud {
 
             TopLevelItem topLevelItem = null;
             if (prevFolder == null) {
-                topLevelItem = Jenkins.getActiveInstance().getItem(item);
+                topLevelItem = Jenkins.get().getItem(item);
             } else {
                 Collection<TopLevelItem> items = prevFolder.getItems();
                 for (TopLevelItem levelItem : items) {
@@ -630,7 +629,7 @@ public class vSphereCloud extends Cloud {
             }
         }
 
-        for (Cloud cloud : Jenkins.getInstance().clouds) {
+        for (Cloud cloud : Jenkins.get().clouds) {
             if (cloud instanceof vSphereCloud) {
                 vSphereClouds.add((vSphereCloud) cloud);
             }

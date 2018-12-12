@@ -76,7 +76,7 @@ public class vSphereStep extends AbstractStepImpl {
             throwUnlessUserHasPermissionToConfigureJob(context);
             ListBoxModel select = new ListBoxModel();
             try {
-                for (Cloud cloud : Jenkins.getInstance().clouds) {
+                for (Cloud cloud : Jenkins.get().clouds) {
                     if (cloud instanceof vSphereCloud) {
                         select.add(((vSphereCloud) cloud).getVsDescription());
                     }
@@ -88,7 +88,7 @@ public class vSphereStep extends AbstractStepImpl {
         }
 
         public DescriptorExtensionList<VSphereBuildStep, VSphereBuildStep.VSphereBuildStepDescriptor> getBuildSteps() {
-            return Jenkins.getInstance().getDescriptorList(VSphereBuildStep.class);
+            return Jenkins.get().getDescriptorList(VSphereBuildStep.class);
         }
     }
 

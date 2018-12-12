@@ -163,7 +163,7 @@ public class ReconfigureDisk extends ReconfigureStep {
 			if (retry > 1) {
 				throw new VSphereException("Unable to add a SCSI Controller");
 			}
-			VSphereLogger.vsLogger(jLogger, String.format("Adding a SCSI Controller"));
+			VSphereLogger.vsLogger(jLogger, "Adding a SCSI Controller");
 			addSCSIController(vm);
 			return createAddDiskConfigSpec(vm, diskSize, jLogger, retry + 1);
 		}

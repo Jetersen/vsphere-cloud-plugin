@@ -34,7 +34,7 @@ public final class VSphereGuestInfoProperty implements Describable<VSphereGuestI
     @SuppressWarnings("unchecked")
     @Override
     public Descriptor<VSphereGuestInfoProperty> getDescriptor() {
-        return Jenkins.getInstance().getDescriptor(getClass());
+        return Jenkins.get().getDescriptor(getClass());
     }
 
     @Extension

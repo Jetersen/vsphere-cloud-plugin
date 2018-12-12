@@ -111,8 +111,7 @@ public final class CloudProvisioningRecord {
 
     private int calcMaxToProvision() {
         final int templateInstanceCap = template.getTemplateInstanceCap();
-        final int maxToProvision = templateInstanceCap == 0 ? Integer.MAX_VALUE : templateInstanceCap;
-        return maxToProvision;
+        return templateInstanceCap == 0 ? Integer.MAX_VALUE : templateInstanceCap;
     }
 
     private boolean hasFiniteCapacity() {
